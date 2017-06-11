@@ -1,68 +1,54 @@
-var form = document.getElementsByTagName('form')[0];
+var form = document.getElementsByTagName('form')[0]; // referencja do form
 
-form.addEventListener('submit', onFormSubmit);
+form.addEventListener('submit', onFormSubmit); // dodanie zdarzenia na wyslanie formularza czyli dodanie zadania do wykonania (task)
 
-// form.addEventListener('click', removeTask);
-
-var id = 1;
+var id = 1; // deklaracja i poczatkowa wartosc dla id zadan, od 1 dla zgodnosci z baza danych
 
 
-
+//funkcja dodajaca zadanie
 function addTask() {
+	var input = document.getElementById('task'); // referencja do inputa
 
-	var input = document.getElementById('task');
-
+	//jesli input ma zawartosc to dodaj task
 	if(input.value.length > 0) {
 	
-		var table = document.getElementById('table');
+		var table = document.getElementById('table'); // referencja do tabeli zadan
 
-		var rowIndex = document.getElementById('table').getElementsByTagName("tr").length;
+		var rowIndex = document.getElementById('table').getElementsByTagName("tr").length; // okreslenie indexu dla row
 
-		var row = table.insertRow(rowIndex - 1);
-
-
+		var row = table.insertRow(rowIndex - 1); // wstawienie row o podanym indexie do tabeli
 		
-		// row.setAttribute("id", id);
+		row.setAttribute("id", 'row-id-' + id); // przypisanie id dla row
 
-		var cell1 = row.insertCell(0);
-		var cell2 = row.insertCell(1);
-		var cell3 = row.insertCell(2);
+		var cell1 = row.insertCell(0); // utworzenie i dodanie komorki(0) do row
+		var cell2 = row.insertCell(1); // utworzenie i dodanie komorki(1) do row
 
 
-		cell1.innerHTML = '<input type="checkbox">';
-		cell2.innerHTML = input.value;
-		// cell3.innerHTML = '<button id="' + id++ + '" onclick="removeTask()">Delete</button>';
-		cell3.innerHTML = '<button id="button-' + id + '">Delete</button>';
+		cell1.innerHTML = '<input type="checkbox">'; // wstawienie inputa - checkboxa do komorki
+		cell2.innerHTML = input.value + '<button id="button-id-' + id + '">Delete</button>'; // przypisanie wartosci z inputa do komorki (task), wstawienie buttona do komorki i przypisanie mu id
 
-		var button = document.getElementById('button-' + id++);
+		var button = document.getElementById('button-id-' + id++); // referencja do buttona, pozniej zwiekszenie id o 1
 
-		// button.onclick = function(e) {
-		// 	alert(this.id);
-		// };
-
-		// console.log(button);
-		button.addEventListener('click', removeTask);
+		button.addEventListener('click', removeTask); // na koniec dodanie zdarzenie usuniecia konkretnego row dla buttona
 
 	}
 
 }
 
 
-function removeTask(event) {
+function removeTask() {
+	var table = document.getElementById('table'); // referencja do tabeli zadan
 
-	// var table = document.getElementById('table');
+	// console.log(this.id);
 
-	// var rowIndex = document.getElementById('table').getElementsByTagName("tr").length;
+	var clickedButtonId = this.id.slice(10); // dobranie sie do wartosci liczbowej id
 
-	// var row = table.deleteRow(id);
-	console.log(event.target.id);
-	
-
+    var row = document.getElementById('row-id-' + clickedButtonId); // referencja do row do usuniecia
+    row.parentNode.removeChild(row); // usuniecie konkretnego row
 }
 
 function onFormSubmit(event) {
-	event.preventDefault();
-	addTask();
-	form.reset();
-	// validate();
+	event.preventDefault(); // zapobieganie wyslaniu formularza i przeladowania strony
+	addTask(); // dodanie taska
+	form.reset(); // usuniecie zawartosci inputa w form
 }
